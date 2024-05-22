@@ -1,0 +1,80 @@
+﻿@model IEnumerable<WEBSV5TOT.Models.User>
+@{
+    ViewData["Title"] = "Danh sách tài khoản";
+    Layout = "~/Areas/Admin/Views/Shared/Layout.cshtml";
+
+}
+<div class="card">
+    <div class="card-header">
+
+        <div class="row justify-content-between align-items-center">
+            <h3 class="card-title">Danh sách tài khoản</h3>
+            <button class="btn btn-success">Thêm mới</button>
+        </div>
+
+    </div>
+    <div class="card-body">
+        <table id="example1" class="table table-bordered table-striped">
+            <thead>
+                <tr class="text-center">
+                    <th>STT</th>
+                    <th>Họ tên</th>
+                    <th>Giới tính</th>
+                    <th>MSSV</th>
+                    <th>Email</th>
+                    <th>HĐ đã tham gia</th>
+                    <th>Quyền hạn</th>
+                    <th>Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @if(Model !=null)
+                {
+                    int stt = 1;
+                    foreach(var item in Model)
+                    {
+                        <tr>
+                            <td class="text-center">@stt</td>
+                            <td>@item.FullName</td>
+                            <td>@item.Gender</td>
+                            <td>@item.Mssv</td>
+                            <td>@item.Email</td>
+                            <th>0</th>
+                            <td>@item.Role.RoleName</td>
+                            <td class="text-center">
+                                <a href="/Admin/User/Edit/@item.Id" class="btn btn-warning">Sửa</a>
+                                <button data-pid="@item.Id" class="btn btn-danger delete">Xóa</button>
+                            </td>
+                        </tr>
+                        stt++;
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="card-footer">
+    </div>
+</div>
+@section Scripts {
+    <script>
+        $("#example1").DataTable({
+            "responsive": true, "lengthChange": false, "autoWidth": false,
+            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+        $('#example2').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": false,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+        });
+        $(".delete").on("click",function(e){
+            e.preventDefault();
+            var id = $(this).data("pid");
+            PostDataWithObject("delete", id, "/Admin/User/Delete", "Xóa thành công", "Xóa Không thành công", "", "/Admin/User/index");
+        })
+    </script>
+}

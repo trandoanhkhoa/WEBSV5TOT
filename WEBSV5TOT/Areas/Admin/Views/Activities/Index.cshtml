@@ -1,0 +1,95 @@
+﻿@model IEnumerable<WEBSV5TOT.Models.Activity>
+@{
+    Layout = "~/Areas/Admin/Views/Shared/Layout.cshtml";
+    ViewData["Title"] = "Danh sách hoạt động";
+}
+
+<div class="card">
+    <div class="card-header">
+
+        <div class="row justify-content-between align-items-center">
+            <h3 class="card-title">Danh sách hoạt động</h3>
+            <a href="/Admin/Activities/Create" class="btn btn-success">Thêm mới</a>
+        </div>
+
+    </div>
+    <div class="card-body">
+        <table id="example1" class="table table-bordered table-striped">
+            <thead>
+                <tr class="text-center">
+                    <th>STT</th>
+                    <th>Tên hoạt động</th>
+                    <th>Từ ngày</th>
+                    <th>Đến ngày</th>
+                    <th>Trạng thái</th>
+                    <th>Số lượng đang tham gia</th>
+                    <th>Loại hoạt động</th>
+                    <th>Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @if (Model != null)
+                {
+                    int stt = 1;
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="text-center">@stt</td>
+                            <td>@item.Name</td>
+                            <td>@item.FromDate.ToString("dd/MM/yyyy")</td>
+                            <td>@item.ToDate?.ToString("dd/MM/yyyy")</td>
+
+                            @{
+                                if (DateTime.Now >= item.FromDate && DateTime.Now <= item.ToDate)
+                                {
+                                    <td> <span>Hoạt động</span></td>
+                                }
+                                else if (DateTime.Now > item.ToDate)
+                                {
+                                    <td> <span>Kết thúc</span></td>
+                                }
+                                else if (DateTime.Now < item.FromDate)
+                                {
+                                    <td> <span>Chưa diễn ra</span></td>
+                                }
+                            }
+
+                            <th>1</th>
+                            <td>@item.Type</td>
+                            <td class="text-center">
+                                <a href="/Admin/Activities/Edit/@item.Id" class="btn btn-warning">Sửa</a>
+                                <button data-pid="@item.Id" class="btn btn-danger delete">Xóa</button>
+                            </td>
+                        </tr>
+                        stt++;
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="card-footer">
+    </div>
+</div>
+@section Scripts {
+    <script>
+        $("#example1").DataTable({
+            "responsive": true, "lengthChange": false, "autoWidth": false,
+            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+        $('#example2').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": false,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+        });
+        $(".delete").on("click", function (e) {
+            e.preventDefault();
+            var id = $(this).data("pid");
+            PostDataWithObject("delete", id, "/Admin/Activities/Delete", "Xóa thành công", "Xóa Không thành công", "", "/Admin/Activities/index");
+        })
+    </script>
+}

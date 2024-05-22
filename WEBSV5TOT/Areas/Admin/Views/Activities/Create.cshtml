@@ -1,0 +1,110 @@
+﻿@{
+    ViewData["Title"] = "Tạo Hoạt động";
+    Layout = "~/Areas/Admin/Views/Shared/Layout.cshtml";
+}
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-header">Tạo hoạt động mới</h3>
+    </div>
+    <div class="card-body">
+        <form id="form" class="needs-validation" novalidate>
+            <div class="row">
+                <div class="col-sm-3">
+                    <!-- text input -->
+                    <div class="form-group">
+                        <label>Tên hoạt động</label>
+                        <input id="Name" type="text" class="form-control" placeholder="Tên hoạt động" required>
+                        <div class="invalid-feedback">
+                            Vui lòng nhập tên hoạt động.
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <!-- text input -->
+                    <div class="form-group">
+                        <label>Thời gian bắt đầu</label>
+                        <div class="input-group date" id="fromDatepk" data-target-input="nearest">
+                            <input id="fromDate" type="text" value="@DateTime.Now.ToString("dd/MM/YYYY")" class="form-control datetimepicker-input" data-target="#fromDatepk" />
+                            <div class="input-group-append" data-target="#fromDatepk" data-toggle="datetimepicker">
+                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                            </div>
+                            <div class="invalid-feedback">
+                                Vui lòng ngày bắt đầu.
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-sm-3">
+                    <!-- text input -->
+                    <div class="form-group">
+                        <label>Thời gian kết thúc</label>
+                        <div class="input-group date" id="toDatepk" data-target-input="nearest">
+                            <input id="toDate" type="text" value="@DateTime.Now.ToString("dd/MM/YYYY")" class="form-control datetimepicker-input" data-target="#toDatepk" />
+                            <div class="input-group-append" data-target="#toDatepk" data-toggle="datetimepicker">
+                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                            </div>
+                            <div class="invalid-feedback">
+                                Vui lòng ngày kết thúc.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <label>Loại hoạt động</label>
+                    <select id="Type" class="form-control select2" style="width:100%">
+                        <option selected value="Thể lực tốt">Thể lực tốt</option>
+                        <option value="Hội nhập tốt">Hội nhập tốt</option>
+                        <option value="Học tập tốt">Học tập tốt</option>
+                        <option value="Đạo đưc tốt">Đạo đưc tốt</option>
+                        <option value="Tình nguyện tốt">Tình nguyện tốt</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <textarea id="summernote">Mô tả</textarea>
+                </div>
+
+            </div>
+            <div class="card-footer text-right">
+                <button type="submit" class="btn btn-success create">Thêm mới</button>
+            </div>
+        </form>
+    </div>
+    <div class="card-footer">
+    </div>
+</div>
+@section Scripts{
+    <script>
+        $('#fromDatepk').datetimepicker({
+            format: 'DD/MM/YYYY'
+        });
+        $('#toDatepk').datetimepicker({
+            format: 'DD/MM/YYYY'
+        });
+        $('#summernote').summernote();
+        $('.select2').select2({
+            theme: 'bootstrap4'
+        });
+        $(".create").on("click", function (e) {
+            e.preventDefault();
+            var chk = CheckValidate("#form");
+
+            if (chk === true) // Tất cả các trường thuộc tính đều hợp lệ
+            {
+                var ob = {
+                    "Name": $("#Name").val(),
+                    "Description": $("#summernote").val(),
+                    "Status": $("#Email").val(),
+                    "FromDate": moment($("#fromDate").val(), 'DD/MM/YYYY').format("MM/DD/YYYY"),
+                    "ToDate": moment($("#toDate").val(), 'DD/MM/YYYY').format("MM/DD/YYYY"),
+                    "Type": $("#Type").val(),
+                    
+                }
+
+                PostDataWithObject("add", ob, "/Admin/Activities/Create", "Tạo mới thành công", "Thêm Không thành công", "", "/Admin/Activities/Create");
+            }
+        })
+    </script>
+}

@@ -1,0 +1,289 @@
+﻿@using WEBSV5TOT.Models;
+@model WEBSV5TOT.Models.User;
+@{
+    ViewData["Title"] = "Chỉnh sửa tài khoản";
+    Layout = "~/Areas/Admin/Views/Shared/Layout.cshtml";
+    var lstLop = ViewBag.Lop as List<Class>;
+    var lstDonvi = ViewBag.Donvi as List<Part>;
+    var lstRole = ViewBag.Role as List<Role>;
+}
+<div class="row">
+    <div class="col-md-3">
+
+        <!-- Profile Image -->
+        <div class="card card-primary card-outline">
+            <div class="card-body box-profile">
+                <div class="text-center">
+                    <img class="profile-user-img img-fluid img-circle"
+                         src="~/assets/dist/img/user4-128x128.jpg"
+                         alt="User profile picture">
+                </div>
+
+                <h3 class="profile-username text-center">@Model.FullName</h3>
+
+                <p class="text-muted text-center">@Model.Mssv</p>
+
+                <ul class="list-group list-group-unbordered mb-3">
+                    <li class="list-group-item">
+                        <b>Hoạt động đã tham gia</b> <a class="float-right">1,322</a>
+                    </li>
+                    
+                </ul>
+            </div>
+            <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+        <!-- About Me Box -->
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title">About Me</h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                <strong><i class="fas fa-book mr-1"></i> Education</strong>
+
+                <p class="text-muted">
+                    B.S. in Computer Science from the University of Tennessee at Knoxville
+                </p>
+
+                <hr>
+
+                <strong><i class="fas fa-map-marker-alt mr-1"></i> Location</strong>
+
+                <p class="text-muted">Malibu, California</p>
+
+                <hr>
+
+                <strong><i class="fas fa-pencil-alt mr-1"></i> Skills</strong>
+
+                <p class="text-muted">
+                    <span class="tag tag-danger">UI Design</span>
+                    <span class="tag tag-success">Coding</span>
+                    <span class="tag tag-info">Javascript</span>
+                    <span class="tag tag-warning">PHP</span>
+                    <span class="tag tag-primary">Node.js</span>
+                </p>
+
+                <hr>
+
+                <strong><i class="far fa-file-alt mr-1"></i> Notes</strong>
+
+                <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam fermentum enim neque.</p>
+            </div>
+            <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+    </div>
+    <!-- /.col -->
+    <div class="col-md-9">
+        <div class="card">
+            <div class="card-header p-2">
+                <h3 class="card-title">Thông tin chi tiết</h3>
+            </div><!-- /.card-header -->
+            <div class="card-body">
+                <form id="form" class="needs-validation" novalidate>
+                    @Html.TextBoxFor(x=>x.Id,new{@type="hidden"})
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <!-- text input -->
+                            <div class="form-group">
+                                <label>Mã số sinh viên</label>
+                                <input id="MSSV" value="@Model.Mssv" type="text" class="form-control" placeholder="Nhập mã sinh viên" required>
+                                <div class="invalid-feedback">
+                                    Vui lòng nhập mã số sinh viên.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <!-- text input -->
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input id="Email" type="email" value="@Model.Email" class="form-control" placeholder="Nhập Email sinh viên" required>
+                                <div class="invalid-feedback">
+                                    Vui lòng nhập email hợp lệ.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <!-- text input -->
+                            <div class="form-group">
+                                <label>Lớp đang học</label>
+                                @if (lstLop != null)
+                                {
+                                    <select id="ClassId" class="form-control select2" style="width:100%" required>
+                                        <option selected disabled value="0">Mặc định</option>
+                                        @foreach (var item in lstLop)
+                                        {
+                                            if(item.Id==Model.ClassId)
+                                            {
+                                                <option selected value="@item.Id">@item.Name</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.Id">@item.Name</option>
+                                            }
+
+                                        }
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        Vui lòng chọn lớp.
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <!-- text input -->
+                            <div class="form-group">
+                                <label>Khoa</label>
+                                @if (lstDonvi != null)
+                                {
+                                    <select id="PartId" class="form-control select2" style="width:100%" required>
+                                        @foreach (var item in lstDonvi)
+                                        {
+                                            if(item.Id==Model.PartId)
+                                            {
+                                                <option selected value="@item.Id">@item.Name</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.Id">@item.Name</option>
+                                            }
+
+                                        }
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        Vui lòng chọn khoa.
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <!-- text input -->
+                            <div class="form-group">
+                                <label>Tên sinh viên</label>
+                                <input id="Fullname" value="@Model.FullName" type="text" class="form-control" placeholder="Nhập tên sinh viên" required>
+                                <div class="invalid-feedback">
+                                    Vui lòng nhập tên sinh viên.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <!-- text input -->
+                            <div class="form-group">
+                                <label>Giới tính</label>
+                                <select id="Gender" class="form-control select2" style="width:100%" required>
+                                    <option selected value="0">Nam</option>
+                                    <option value="1">Nữ</option>
+                                    <option value="-1">Khác</option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Vui lòng chọn giới tính.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <label for="Avatar">Ảnh đại diện</label>
+                                <div class="input-group">
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="Avatar">
+                                        <label class="custom-file-label" for="Avatar">Chọn tệp</label>
+                                    </div>
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">Upload</span>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <!-- text input -->
+                            <div class="form-group">
+                                <label>Phân Quyền</label>
+                                @if (lstRole != null)
+                                {
+                                    <select id="Role" class="form-control select2" style="width:100%" required>
+                                        @foreach (var item in lstRole)
+                                        {
+                                            if(item.Id == Model.RoleId)
+                                            {
+                                                <option selected value="@item.Id">@item.RoleName</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.Id">@item.RoleName</option>
+                                            }
+
+                                        }
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        Vui lòng chọn phân quyền.
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <!-- text input -->
+                            <div class="form-group">
+                                <label>Tên tài khoản</label>
+                                <input id="Username" value="@Model.Username" type="text" class="form-control" placeholder="Tên tài khoản" required>
+                                <div class="invalid-feedback">
+                                    Vui lòng nhập tên tài khoản.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <!-- text input -->
+                            <div class="form-group">
+                                <label>Mật khẩu</label>
+                                <input id="Password" value="@Model.Password" type="password" class="form-control" placeholder="Nhập mật khẩu" required>
+                                <div class="invalid-feedback">
+                                    Vui lòng nhập mật khẩu.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer text-right">
+                        <button type="submit" class="btn btn-success save">Save</button>
+                    </div>
+                </form>
+            </div><!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+    </div>
+    <!-- /.col -->
+</div>
+@section Scripts{
+    <script>
+        $('.select2').select2({
+            theme: 'bootstrap4'
+        });
+        $(".save").on("click", function (e) {
+            e.preventDefault();
+            var chk = CheckValidate("#form");
+
+            if (chk === true) // Tất cả các trường thuộc tính đều hợp lệ
+            {
+                var ob = {
+                    "Id": $("#Id").val(),
+                    "Fullname": $("#Fullname").val(),
+                    "MSSV": $("#MSSV").val(),
+                    "Email": $("#Email").val(),
+                    "ClassId": $("#ClassId").val(),
+                    "Avatar": $("#Avatar").val(),
+                    "Gender": $("#Gender").val(),
+                    "RoleId": $("#Role").val(),
+                    "PartId": $("#PartId").val(),
+                    "Username": $("#Username").val(),
+                    "Password": $("#Password").val()
+                }
+                
+                PostDataWithObject("add", ob, "/Admin/User/Edit", "Chỉnh sửa thành công", "Sửa Không thành công", "", "/Admin/User/index");
+            }
+        })
+    </script>
+}

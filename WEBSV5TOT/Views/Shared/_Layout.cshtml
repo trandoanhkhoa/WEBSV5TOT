@@ -1,0 +1,170 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="~/assets/styles/header_footer_mainpage.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="~/assets/dist/css/adminlte.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito">
+    <script src="https://kit.fontawesome.com/0f2d543076.js" crossorigin="anonymous"></script>
+    <!-- Select2 -->
+    <link rel="stylesheet" href="~/assets/plugins/select2/css/select2.min.css">
+    <link rel="stylesheet" href="~/assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="~/assets/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
+    <!-- DataTables -->
+    <link rel="stylesheet" href="~/assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="~/assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="~/assets/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+    <!-- Theme style -->
+    <title>Road Map Sinh Viên 5 Tốt</title>
+</head>
+<body>
+    <!-- HEADER -->
+    <div id="header">
+        <div id="title-site">
+            <div class="logo">
+                <p class="title-site_logo-truong"><img src="~/assets/img/logoTruong.png" alt=""></p>
+                <p class="logo-hoi"><img src="~/assets/img/logoHoi.png" alt=""></p>
+            </div>
+            <div class="background"></div>
+        </div>
+    </div>
+
+    <!-- NỘI DUNG -->
+    <section class="content">
+        <div class="container-fluid">
+            <div id="container">
+
+                <!-- THANH CÔNG CỤ -->
+                <div id="tool-bar">
+
+                    <!-- KHU VỰC BÊN TRÁI -->
+                    <div class="left-site">
+                        <div class="TrangChu option">
+                            <a href="/Home/index">
+                                <i class="fa-solid fa-house"></i>
+                                Trang chủ
+                            </a>
+                        </div>
+                        <div class="DanhSachSV5T option">
+                            <a href="">
+                                <i class="fa-solid fa-circle-user"></i>
+                                Danh sách SV5T
+                            </a>
+                        </div>
+                        <div class="BoTieuChi option">
+                            <a href="">
+                                <i class="fa-solid fa-newspaper"></i>
+                                Bộ tiêu chí
+                            </a>
+                            <ul class="BoTieuChi-options nav">
+                                <li>No information</li>
+                            </ul>
+                        </div>
+                        <div id="openSideBar" class="Menu option">
+                            <a>
+                                <i class="fa-solid fa-bars"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- KHU VỰC BÊN PHẢI -->
+                    <div class="right-site">
+                        <div class="Notification option">
+                            <i class="fa-solid fa-bell"></i>
+                            <ul class="Notification-options nav">
+                                <li>No Notification</li>
+                            </ul>
+                        </div>
+                        <div class="User option">
+                            <a href="/DSHoatdong/index"></a> <i class="fa-solid fa-user"></i>
+                        </div>
+                        <div class="Setting option">
+                            <i class="fa-solid fa-gear"></i>
+                            <ul class="Setting-options nav">
+                                <li>Đăng nhập</li>
+                                <li>Đăng ký</li>
+                                <hr>
+                                <li>Thay đổi thông tin cá nhân</li>
+                                <li class="theme">
+                                    <i class="fa-solid fa-caret-left"></i>
+                                    Tuỳ chỉnh
+                                    <ul class="nav1">
+                                        <li id="lightmood">
+                                            <i class="fa-solid fa-sun"></i>
+                                            light mood
+                                        </li>
+                                        <li id="darkmood">
+                                            <i class="fa-solid fa-moon"></i>
+                                            dark mood
+                                        </li>
+                                    </ul>
+                                </li>
+                                <hr>
+                                <li>Đăng xuất</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- THANH BÊN (XUẤT HIỆN CHO MÀN HÌNH NHỎ, KHI BẤM VÀO ICON MENU) -->
+                <div id="side-bar">
+                    <i id="closeSideBar" class="fa-solid fa-circle-xmark"></i>
+                    <div>
+                        <a href="#">Trang chủ</a>
+                        <a href="#">Danh sách SV5T</a>
+                        <a href="#">Bộ tiêu chí</a>
+                    </div>
+                </div>
+
+                <!-- NỘI DUNG CHÍNH -->
+                <div id="content">
+                    @RenderBody()
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+
+    <!-- FOOTER -->
+    <div id="footer">
+        <img src="~/assets/img/ToanhaA-01.png" alt="">
+        <div class="container">
+            <p class="address1">280 An Dương Vương, Phường 4, Quận 5, Thành Phố Hồ Chí Minh</p>
+            <p class="address2">222 Lê Văn Sỹ, Phường 14, Quận 3, Thành phố Hồ Chí Minh</p>
+            <p class="phonenumber">Điện thoại: (+84) - (28) - 38352020 Fax: (+84) - (28) - 38398946</p>
+
+        </div>
+    </div>
+    <script src="~/assets/plugins/jquery/jquery.min.js"></script>
+    <script src="~/assets/script/header_footer_mainpage.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="~/assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="~/assets/dist/js/adminlte.min.js"></script>
+    <script src="~/assets/script/main.js"></script>
+    <!-- Select2 -->
+    <script src="~/assets/plugins/select2/js/select2.min.js"></script>
+    <!-- SweetAlert2 -->
+    <script src="~/assets/plugins/sweetalert2/sweetalert2.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="~/assets/dist/js/adminlte.min.js"></script>
+    <!-- DataTables  & Plugins -->
+    <script src="~/assets/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/assets/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/assets/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="~/assets/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="~/assets/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="~/assets/plugins/jszip/jszip.min.js"></script>
+    <script src="~/assets/plugins/pdfmake/pdfmake.min.js"></script>
+    <script src="~/assets/plugins/pdfmake/vfs_fonts.js"></script>
+    <script src="~/assets/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="~/assets/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="~/assets/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+    @RenderSection("Scripts",required: false)
+</body>
+</html>

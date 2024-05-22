@@ -1,0 +1,199 @@
+﻿@using WEBSV5TOT.Models;
+@{
+    ViewData["Title"] = "Thêm mới tài khoản";
+    Layout = "~/Areas/Admin/Views/Shared/Layout.cshtml";
+    var lstLop = ViewBag.Lop as List<Class>;
+    var lstDonvi = ViewBag.Donvi as List<Part>;
+    var lstRole = ViewBag.Role as List<Role>;
+}
+
+
+<div class="card" id="form-card">
+    <div class="card-header">
+        <div class="row justify-content-between align-items-center">
+            <h3 class="card-title">Tạo tài khoản</h3>
+            <button class="btn btn-default">Import Danh sách</button>
+        </div>
+    </div>
+    <div class="card-body">
+        <form id="form" class="needs-validation" novalidate>
+            <div class="row">
+                <div class="col-sm-3">
+                    <!-- text input -->
+                    <div class="form-group">
+                        <label>Mã số sinh viên</label>
+                        <input id="MSSV" type="text" class="form-control" placeholder="Nhập mã sinh viên" required>
+                        <div class="invalid-feedback">
+                            Vui lòng nhập mã số sinh viên.
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <!-- text input -->
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input id="Email" type="email" class="form-control" placeholder="Nhập Email sinh viên" required>
+                        <div class="invalid-feedback">
+                            Vui lòng nhập email hợp lệ.
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <!-- text input -->
+                    <div class="form-group">
+                        <label>Lớp đang học</label>
+                        @if (lstLop != null)
+                        {
+                            <select id="ClassId" class="form-control select2" style="width:100%" required>
+                                <option selected disabled value="0">Mặc định</option>
+                                @foreach (var item in lstLop)
+                                {
+                                    <option value="@item.Id">@item.Name</option>
+                                }
+                            </select>
+                            <div class="invalid-feedback">
+                                Vui lòng chọn lớp.
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <!-- text input -->
+                    <div class="form-group">
+                        <label>Khoa</label>
+                        @if (lstDonvi != null)
+                        {
+                            <select id="PartId" class="form-control select2" style="width:100%" required>
+                                @foreach (var item in lstDonvi)
+                                {
+                                    <option value="@item.Id">@item.Name</option>
+                                }
+                            </select>
+                            <div class="invalid-feedback">
+                                Vui lòng chọn khoa.
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-3">
+                    <!-- text input -->
+                    <div class="form-group">
+                        <label>Tên sinh viên</label>
+                        <input id="Fullname" type="text" class="form-control" placeholder="Nhập tên sinh viên" required>
+                        <div class="invalid-feedback">
+                            Vui lòng nhập tên sinh viên.
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <!-- text input -->
+                    <div class="form-group">
+                        <label>Giới tính</label>
+                        <select id="Gender" class="form-control select2" style="width:100%" required>
+                            <option selected value="0">Nam</option>
+                            <option value="1">Nữ</option>
+                            <option value="-1">Khác</option>
+                        </select>
+                        <div class="invalid-feedback">
+                            Vui lòng chọn giới tính.
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label for="Avatar">Ảnh đại diện</label>
+                        <div class="input-group">
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="Avatar">
+                                <label class="custom-file-label" for="Avatar">Chọn tệp</label>
+                            </div>
+                            <div class="input-group-append">
+                                <span class="input-group-text">Upload</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <!-- text input -->
+                    <div class="form-group">
+                        <label>Phân Quyền</label>
+                        @if (lstRole != null)
+                        {
+                            <select id="Role" class="form-control select2" style="width:100%" required>
+                                @foreach (var item in lstRole)
+                                {
+                                    <option value="@item.Id">@item.RoleName</option>
+                                }
+                            </select>
+                            <div class="invalid-feedback">
+                                Vui lòng chọn phân quyền.
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-3">
+                    <!-- text input -->
+                    <div class="form-group">
+                        <label>Tên tài khoản</label>
+                        <input id="Username" type="text" class="form-control" placeholder="Tên tài khoản" required>
+                        <div class="invalid-feedback">
+                            Vui lòng nhập tên tài khoản.
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <!-- text input -->
+                    <div class="form-group">
+                        <label>Mật khẩu</label>
+                        <input id="Password" type="password" class="form-control" placeholder="Nhập mật khẩu" required>
+                        <div class="invalid-feedback">
+                            Vui lòng nhập mật khẩu.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer text-right">
+                <button type="submit" class="btn btn-success create">Thêm mới</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $('.select2').select2({
+            theme: 'bootstrap4'
+        });
+        
+        $(".create").on("click",function(e){
+            e.preventDefault();
+            var chk = CheckValidate("#form");
+            
+            if (chk === true) // Tất cả các trường thuộc tính đều hợp lệ
+            {
+                var ob = {
+                    "Fullname": $("#Fullname").val(),
+                    "MSSV": $("#MSSV").val(),
+                    "Email": $("#Email").val(),
+                    "ClassId": $("#ClassId").val(),
+                    "Avatar": $("#Avatar").val(),
+                    "Gender": $("#Gender").val(),
+                    "RoleId": $("#Role").val(),
+                    "PartId": $("#PartId").val(),
+                    "Username": $("#Username").val(),
+                    "Password":$("#Password").val()
+                }
+                
+                PostDataWithObject("add", ob, "/Admin/User/Create", "Tạo mới thành công", "Thêm Không thành công", "", "/Admin/User/Create");
+            }
+        })
+        
+    </script>
+
+
+}

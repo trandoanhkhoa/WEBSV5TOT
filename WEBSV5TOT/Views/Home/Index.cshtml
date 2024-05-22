@@ -1,0 +1,92 @@
+﻿@model IEnumerable<WEBSV5TOT.Models.Activity>;
+@{
+    ViewData["Title"] = "Home Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="row mt-2">
+    <div class="col-sm-9">
+        <div class="card-header">
+            <h4>DANH SÁCH HOẠT ĐỘNG NĂM 2023-2024</h4>
+        </div>
+        <div class="card-body">
+            <table id="example1" class="table table-head-fixed text-nowrap">
+                <thead>
+                    <tr class="text-center">
+                        <th>STT</th>
+                        <th>Hoạt động</th>
+                        <th>Ngày diễn ra</th>
+                        <th>Trạng thái</th>
+                        <th>Tiêu chí</th>
+                        <th>Tham gia</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null)
+                    {
+                        int stt = 1;
+                        @foreach (var item in Model)
+                        {
+                            bool check = true;
+                            <tr class="text-center">
+                                <td>@stt</td>
+                                <td class="text-left">@item.Name</td>
+                                <td>@item.FromDate.ToString("dd/MM/yyyy") - @item.ToDate?.ToString("dd/MM/yyyy") </td>
+
+                                @if (DateTime.Now >= item.FromDate && DateTime.Now <= item.ToDate)
+                                {
+                                    <td>
+                                        <span class="border border-success text-success p-1" style="border-radius:8px;">Hoạt động</span>
+                                    </td>
+                                }
+                                else if (DateTime.Now > item.ToDate)
+                                {
+                                    <td><span class="border border-dark p-1" style="border-radius:8px;">Kết Thúc</span></td>
+                                    check = false;
+                                }
+                                else if (DateTime.Now < item.FromDate)
+                                {
+                                    <td><span class="border border-secondary p-1" style="border-radius:8px;">Chưa diễn ra</span></td>
+                                    
+                                }
+
+
+                                <td>@item.Type</td>
+                                <td  class="text-center">
+                                    @if(check)
+                                    {
+                                    <button data-id="@item.Id" class="btn btn-success join">Tham gia</button>
+                                        
+                                    }
+                                </td>
+                            </tr>
+                            stt++;
+                        }
+                    }
+
+
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+    <div class="col-sm-3"></div>
+</div>
+
+<!-- /.row -->
+@section Scripts{
+    <script>
+        $("#example1").DataTable({
+            "responsive": true, "lengthChange": false, "autoWidth": false,
+        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+        $(".join").on("click",function(e){
+            e.preventDefault();
+            var id = $(this).data("id");
+            var ob = {
+                "idActivity": id
+            }
+            PostDataWithObject("add", ob, "/DSHoatDong/Create", "Tham gia thành công", "Bạn đã tham gia hoạt động này vui lòng xem lại ở cá nhân", "", "/Home/index");
+        })
+    </script>
+}

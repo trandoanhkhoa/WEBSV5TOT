@@ -1,0 +1,61 @@
+﻿@model IEnumerable<WEBSV5TOT.Models.Student5Good>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="card">
+    <div class="card-header">
+        <h4>Danh sách hoạt động bạn đã tham gia</h4>
+    </div>
+    <div class="card-body">
+        <table id="example1" class="table table-head-fixed text-nowrap">
+            <thead>
+                <tr class="text-center">
+                    <th>STT</th>
+                    <th>Tên hoạt động</th>
+                    <th>Tiêu chí</th>
+                    <th>Ngày diễn ra</th>
+                    <th>Trạng thái</th>
+                    <th>Nộp minh chứng</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null)
+                {
+                    int stt = 1;
+                    @foreach (var item in Model)
+                    {
+                        bool check = true;
+                        <tr class="text-center">
+                            <td>@stt</td>
+                            <td class="text-left">@item.Activity.Name</td>
+                            <td>@item.Activity.Type</td>
+                            <td>@item.Activity.FromDate.ToString("dd/MM/yyyy") - @item.Activity.ToDate?.ToString("dd/MM/yyyy") </td>
+
+                            @if (item.Approval == false)
+                            {
+                                <td><span class="border border-secondary text-secondary p-1" style="border-radius:8px">Chưa được duyệt</span></td>
+                            }
+                            else
+                            {
+                                <td><span class="border border-success text-success p-1" style="border-radius:8px">Đã duyệt</span></td>
+                            }
+                            <td class="text-center">
+                                @if (DateTime.Now >= @item.Activity.FromDate && DateTime.Now <= @item.Activity.ToDate)
+                                {
+                                    <button data-id="@item.Id" class="btn btn-success join">Nộp minh chứng</button>
+                                }
+                                
+                            </td>
+                        </tr>
+                        stt++;
+                    }
+                }
+
+
+            </tbody>
+        </table>
+    </div>
+    <div class="card-footer">
+    </div>
+</div>
+
