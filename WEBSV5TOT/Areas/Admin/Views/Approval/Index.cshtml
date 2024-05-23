@@ -1,0 +1,153 @@
+﻿@using WEBSV5TOT.Models;
+@model IEnumerable<WEBSV5TOT.Models.Student5Good>
+@{
+    Layout = "~/Areas/Admin/Views/Shared/Layout.cshtml";
+    ViewData["Title"] = "Danh sách hoạt động";
+    var listPic = ViewBag.ProofPictures as List<ProofPicture>;
+    var listUsers = ViewBag.Users as List<User>;
+    var listAc = ViewBag.Activities as List<Activity>;
+}
+
+<div class="card">
+    <div class="card-header">
+
+        <div class="row justify-content-between align-items-center">
+            <h3 class="card-title">Danh sách chờ duyệt</h3>
+        </div>
+
+    </div>
+    <div class="card-body">
+        <table id="example1" class="table table-bordered table-striped">
+            <thead>
+                <tr class="text-center">
+                    <th>STT</th>
+                    <th>Tên hoạt động</th>
+                    <th>Tên sinh viên</th>
+                    <th>Ngày nộp minh chứng</th>
+                    <th>Ngày hoạt động</th>
+                    <th>Ảnh minh chứng</th>
+                    <th>Duyệt</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @if (Model != null)
+                {
+                    int stt = 1;
+
+                    foreach (var item in Model)
+                    {
+                       @* Activity? activity = listAc.SingleOrDefault(x => x != null && x.Id == item.ActivityId);
+                        User? user = listUsers.SingleOrDefault(x => x != null && x.Id == item.UserId); ;
+                        if (activity == null || user == null){
+                            continue;
+                        }*@
+                            
+                        <tr>
+                            <td class="text-center">@stt</td>
+                            <td>@(listAc?.FirstOrDefault(x => x.Id == item.ActivityId)?.Name)</td>
+                            <td>@(listUsers?.FirstOrDefault(x => x.Id == item.UserId)?.FullName)</td>
+                            <td>@listPic?.FirstOrDefault(x => x.Student5GoodId == item.Id)?.InputDate.ToString("dd/MM/yyyy")</td>
+                            <td>@item.Year</td>
+                            <td><button data-id="@item.Id" class="btnview btn btn-secondary join" data-toggle="modal" data-target="#viewModal">Xem minh chứng</button></td>
+                            <td>
+                                @if(item.Approval == false)
+                                {
+                                     <button data-id="@item.Id" class="btnapprove btn btn-success join">Duyệt</button>
+                                }
+                                else
+                                {
+                                    <button data-id="@item.Id" class="btndisapprove btn btn-danger join">Hủy duyệt</button>
+                                }
+                            </td>
+                        </tr>
+                        stt++;
+                    }
+                }
+                
+            </tbody>
+        </table>
+    </div>
+    <div class="modal fade" id="viewModal" tabindex="-1" role="dialog" aria-labelledby="viewModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="uploadModalLabel">Ảnh minh chứng</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="listimage">
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="card-footer">
+    </div>
+</div>
+@section Scripts {
+    <script>
+        $('.btnview').on('click', function () {
+            var data_id = this.getAttribute('data-id');
+            $.ajax({
+                url: "/admin/Approval/_ImageList/" + data_id,
+                type: "GET",
+                success: function (result) {
+                    $("#listimage").html(result);
+                },
+                error: function (error) {
+                    console.log("Error:", error);
+                }
+            });
+        });
+        $('.btnapprove').on('click', function () {
+            var data_id = this.getAttribute('data-id');
+            $(this).closest("td").html('<button data-id="' + data_id + '" class="btndisapprove btn btn-danger join">Hủy duyệt</button>');
+            $.ajax({
+                url: "/admin/Approval/Approve/" + data_id,
+                type: "POST",
+                success: function () {
+                    showToast("success", "Đã duyệt thành công", 2500);
+                    
+                },
+                error: function (error) {
+                    showToast("error", "Duyệt thất bại", 2500);
+                }
+            });
+        });
+        $('.btndisapprove').on('click', function () {
+            var data_id = this.getAttribute('data-id');
+            $(this).closest("td").html('<button data-id="' + data_id + '"class="btnapprove btn btn-success join">Duyệt</button>');
+            $.ajax({
+                url: "/admin/Approval/DisApprove/" + data_id,
+                type: "POST",
+                success: function () {
+                    showToast("success", "Đã hủy thành công", 2500);
+                    
+                },
+                error: function (error) {
+                    showToast("error", "Hủy thất bại", 2500);
+                }
+            });
+        });
+        $("#example1").DataTable({
+            "responsive": true, "lengthChange": false, "autoWidth": false,
+            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+        $('#example2').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": false,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+        });
+    </script>
+}

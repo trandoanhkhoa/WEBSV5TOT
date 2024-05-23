@@ -20,4 +20,6 @@ public partial class Student5Good
     public virtual Activity? Activity { get; set; }
 
     public virtual User? User { get; set; }
+
+    public virtual ICollection<ProofPicture> ProofPictures { get; set; }
 }

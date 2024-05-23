@@ -19,16 +19,23 @@
     <link rel="stylesheet" href="~/assets/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
     <!-- Theme style -->
     <title>Road Map Sinh Viên 5 Tốt</title>
+    <style>
+        .z-index-100{
+            z-index: 100;
+        }
+    </style>
 </head>
 <body>
     <!-- HEADER -->
     <div id="header">
         <div id="title-site">
             <div class="logo">
-                <p class="title-site_logo-truong"><img src="~/assets/img/logoTruong.png" alt=""></p>
+                <p class="title-site logo-truong"><img src="~/assets/img/logoTruong.png" alt=""></p>
                 <p class="logo-hoi"><img src="~/assets/img/logoHoi.png" alt=""></p>
             </div>
-            <div class="background"></div>
+            <div class="background" style="background-image: url('/assets/img/ToanhaA-hinhthat.png');">
+            </div>
+
         </div>
     </div>
 
@@ -49,12 +56,12 @@
                             </a>
                         </div>
                         <div class="DanhSachSV5T option">
-                            <a href="">
+                            <a href="/Home/DSSV5TOT">
                                 <i class="fa-solid fa-circle-user"></i>
                                 Danh sách SV5T
                             </a>
                         </div>
-                        <div class="BoTieuChi option">
+                        <div class="BoTieuChi option z-index-100">
                             <a href="">
                                 <i class="fa-solid fa-newspaper"></i>
                                 Bộ tiêu chí
@@ -72,16 +79,16 @@
 
                     <!-- KHU VỰC BÊN PHẢI -->
                     <div class="right-site">
-                        <div class="Notification option">
+                        <div class="Notification option z-index-100">
                             <i class="fa-solid fa-bell"></i>
                             <ul class="Notification-options nav">
                                 <li>No Notification</li>
                             </ul>
                         </div>
                         <div class="User option">
-                            <a href="/DSHoatdong/index"></a> <i class="fa-solid fa-user"></i>
+                            <a href="/DSHoatdong/index"><i class="fa-solid fa-user"></i></a>
                         </div>
-                        <div class="Setting option">
+                        <div class="Setting option z-index-100">
                             <i class="fa-solid fa-gear"></i>
                             <ul class="Setting-options nav">
                                 <li>Đăng nhập</li>

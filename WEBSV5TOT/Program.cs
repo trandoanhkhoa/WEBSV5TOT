@@ -53,7 +53,10 @@ app.UseEndpoints(endpoints =>
         name: "default",
         pattern: "{controller=User}/{action=Login}/{id?}");
 
-
+    endpoints.MapControllerRoute(
+            name: "showImages",
+            pattern: "admin/Approval/_ImageList/{id}",
+            defaults: new { controller = "Approval", action = "_ImageList" });
 
 
 });

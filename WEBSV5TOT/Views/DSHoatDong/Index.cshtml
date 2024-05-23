@@ -42,9 +42,8 @@
                             <td class="text-center">
                                 @if (DateTime.Now >= @item.Activity.FromDate && DateTime.Now <= @item.Activity.ToDate)
                                 {
-                                    <button data-id="@item.Id" class="btn btn-success join">Nộp minh chứng</button>
-                                }
-                                
+                                    <button data-id="@item.Id" class="btnupload btn btn-success join" data-toggle="modal" data-target="#uploadModal">Nộp minh chứng</button>
+                                } 
                             </td>
                         </tr>
                         stt++;
@@ -54,8 +53,174 @@
 
             </tbody>
         </table>
+
+        <div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="uploadModalLabel">Tải tệp lên</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="drop-zone" id="dropZone">
+                            Kéo và thả file để upload hoặc bấm để duyệt file
+                        </div>
+                        <input type="file" id="fileInput" accept=".png,.jpg,.jpeg,.pdf" multiple style="display:none;">
+                        <div class="file-list" id="fileList"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                        <button type="button" class="btn btn-primary" id="submitBtn">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
     <div class="card-footer">
     </div>
 </div>
+<style>
+    .modal-dialog-centered {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: calc(100% - 1rem);
+    }
+    .drop-zone {
+        border: 2px dashed #cccccc;
+        border-radius: 10px;
+        padding: 20px;
+        text-align: center;
+        cursor: pointer;
+        color: #cccccc;
+    }
+    .drop-zone.dragover {
+        border-color: #000;
+        color: #000;
+    }
+    .file-list {
+        margin-top: 10px;
+    }
+    .file-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 5px;
+        padding: 5px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+    .file-item button {
+        background: none;
+        border: none;
+        color: red;
+        cursor: pointer;
+    }
+</style>
+@section Scripts{
+    <script>
+        var data_id = null;
 
+        $(document).ready(function () {
+            let fileList = [];
+
+            $('#dropZone').on('click', function () {
+                $('#fileInput').click();
+            });
+
+            $('#fileInput').on('change', function (e) {
+                handleFiles(e.target.files);
+            });
+
+            $('#dropZone').on('dragover', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                $(this).addClass('dragover');
+            });
+
+            $('#dropZone').on('dragleave', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                $(this).removeClass('dragover');
+            });
+
+            $('#dropZone').on('drop', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                $(this).removeClass('dragover');
+                handleFiles(e.originalEvent.dataTransfer.files);
+            });
+            $('.btnupload').on('click', function () {
+                data_id = this.getAttribute('data-id');
+            });
+            $('.close').on('click', function () {
+                data_id = null;
+            });
+
+            $('#submitBtn').on('click', function () {
+                let formData = new FormData();
+
+                formData.append('Student5GoodId', data_id);
+                fileList.forEach(file => {
+                    formData.append('files', file);
+                });
+
+                $.ajax({
+                    url: '/DSHoatDong/UploadFile',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (response) {
+                        alert('Files uploaded successfully');
+                        // handle success
+                    },
+                    error: function (response) {
+                        alert('Failed to upload files');
+                        // handle error
+                    }
+                });
+            });
+
+            
+
+            function handleFiles(files) {
+                for (let i = 0; i < files.length; i++) {
+                    if (['image/png', 'image/jpeg', 'application/pdf'].includes(files[i].type)) {
+                        fileList.push(files[i]);
+                        displayFile(files[i], fileList.length - 1);
+                    } else {
+                        alert('Unsupported file type');
+                    }
+                }
+            }
+
+            function displayFile(file, index) {
+                let fileListContainer = $('#fileList');
+                let fileItem = $('<div></div>').addClass('file-item');
+                let fileName = $('<span></span>').text(file.name);
+                let deleteBtn = $('<button></button>').text('Delete').on('click', function () {
+                    deleteFile(index);
+                });
+                fileItem.append(fileName).append(deleteBtn);
+                fileListContainer.append(fileItem);
+            }
+
+            function deleteFile(index) {
+                fileList.splice(index, 1);
+                updateFileList();
+            }
+
+            function updateFileList() {
+                let fileListContainer = $('#fileList');
+                fileListContainer.empty();
+                fileList.forEach((file, index) => {
+                    displayFile(file, index);
+                });
+            }
+        });
+    </script>
+}
