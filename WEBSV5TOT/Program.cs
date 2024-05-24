@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using WEBSV5TOT.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -41,7 +42,11 @@ app.UseSession();
 app.UseAuthorization();
 
 
-
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Proofs")),
+    RequestPath = "/Proofs"
+});
 //Vinh add cho phan DownloadFile
 app.UseEndpoints(endpoints =>
 {

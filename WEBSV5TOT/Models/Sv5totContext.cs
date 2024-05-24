@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 
 namespace WEBSV5TOT.Models;
 
@@ -22,13 +21,13 @@ public partial class Sv5totContext : DbContext
 
     public virtual DbSet<Part> Parts { get; set; }
 
+    public virtual DbSet<ProofPicture> ProofPictures { get; set; }
+
     public virtual DbSet<Role> Roles { get; set; }
 
     public virtual DbSet<Student5Good> Student5Goods { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
-
-    public virtual DbSet<ProofPicture> ProofPictures { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 
@@ -63,6 +62,22 @@ public partial class Sv5totContext : DbContext
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.Name).HasMaxLength(50);
+        });
+
+        modelBuilder.Entity<ProofPicture>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__ProofPic__3214EC2766E18A94");
+
+            entity.ToTable("ProofPicture");
+
+            entity.Property(e => e.Id).HasColumnName("ID");
+            entity.Property(e => e.FileName).HasMaxLength(50);
+            entity.Property(e => e.InputDate).HasColumnType("datetime");
+
+            entity.HasOne(d => d.Student5Good).WithMany(p => p.ProofPictures)
+                .HasForeignKey(d => d.Student5GoodId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__ProofPict__Stude__3C34F16F");
         });
 
         modelBuilder.Entity<Role>(entity =>
@@ -127,29 +142,6 @@ public partial class Sv5totContext : DbContext
             entity.HasOne(d => d.Role).WithMany(p => p.Users)
                 .HasForeignKey(d => d.RoleId)
                 .HasConstraintName("FK_Users_Roles");
-        });
-
-        modelBuilder.Entity<ProofPicture>(b =>
-        {
-            b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("ID");
-
-            b.Property<string>("FileName")
-                .HasMaxLength(50)
-                .HasColumnType("nvarchar(50)")
-                .HasColumnName("FileName");
-
-            b.Property<DateTime>("InputDate")
-                .HasColumnType("datetime")
-                .HasColumnName("InputDate");
-
-            b.HasOne(d => d.Student5Good).WithMany(p => p.ProofPictures)
-                .HasForeignKey(d => d.Student5GoodId)
-                .HasConstraintName("FK_ProofPicture_Student5Good");
-
-            b.ToTable("ProofPicture");
         });
 
         OnModelCreatingPartial(modelBuilder);

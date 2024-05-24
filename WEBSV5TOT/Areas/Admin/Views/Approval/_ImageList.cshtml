@@ -2,5 +2,6 @@
 
 @foreach (var image in Model)
 {
-    <img src="@Url.Action("GetImage", "Approval", new { fileName = image.FileName })" alt="Proof Image" />
+    <img src="~/Proofs/@image.FileName" style="width:200px;height:auto;" />
+    @*<img src="@Url.Action("GetImage", "Approval", new { fileName = image.FileName })" alt="Proof Image" />*@
 }

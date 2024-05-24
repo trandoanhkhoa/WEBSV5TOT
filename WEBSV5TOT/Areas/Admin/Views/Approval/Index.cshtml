@@ -49,11 +49,11 @@
                             <td>@(listUsers?.FirstOrDefault(x => x.Id == item.UserId)?.FullName)</td>
                             <td>@listPic?.FirstOrDefault(x => x.Student5GoodId == item.Id)?.InputDate.ToString("dd/MM/yyyy")</td>
                             <td>@item.Year</td>
-                            <td><button data-id="@item.Id" class="btnview btn btn-secondary join" data-toggle="modal" data-target="#viewModal">Xem minh chứng</button></td>
-                            <td>
+                            <td class="text-center"><button data-id="@item.Id" class="btnview btn btn-secondary join" data-toggle="modal" data-target="#viewModal">Xem minh chứng</button></td>
+                            <td class="text-center">
                                 @if(item.Approval == false)
                                 {
-                                     <button data-id="@item.Id" class="btnapprove btn btn-success join">Duyệt</button>
+                                    <button  data-id="@item.Id" class="btnapprove btn btn-success join">Duyệt</button>
                                 }
                                 else
                                 {
