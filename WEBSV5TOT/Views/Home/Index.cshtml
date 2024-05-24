@@ -5,8 +5,8 @@
 }
 
 
-<div class="row mt-2">
-    <div class="col-sm-9">
+<div class="row mr-0 ">
+    <div class="col-sm-10 mt-2">
         <div class="card-header">
             <h4>DANH SÁCH HOẠT ĐỘNG NĂM 2023-2024</h4>
         </div>
@@ -48,16 +48,16 @@
                                 else if (DateTime.Now < item.FromDate)
                                 {
                                     <td><span class="border border-secondary p-1" style="border-radius:8px;">Chưa diễn ra</span></td>
-                                    
+
                                 }
 
 
                                 <td>@item.Type</td>
-                                <td  class="text-center">
-                                    @if(check)
+                                <td class="text-center">
+                                    @if (check)
                                     {
-                                    <button data-id="@item.Id" class="btn btn-success join">Tham gia</button>
-                                        
+                                        <button data-id="@item.Id" class="btn btn-success join">Tham gia</button>
+
                                     }
                                 </td>
                             </tr>
@@ -71,8 +71,166 @@
         </div>
 
     </div>
-    <div class="col-sm-3"></div>
+    <div id="right-side" class="col-sm-2">
+        <div id="divquantity">
+            <table>
+                <tr>
+                    <td>Tổng số lương truy cập:</td>
+                    <td id="access_number">78/3000</td>
+                </tr>
+                <tr>
+                    <td>Số lượng sinh viên 5 tốt đáp ứng đủ tiêu chí:</td>
+                    <td id="sv5t_number">24/3000</td>
+                </tr>
+            </table>
+        </div>
+        <div id="divpicture"
+             style="
+                border-top: black 1px solid;
+                border-bottom: black 1px solid;
+                width: 100%;
+              ">
+            <div id="image-list">
+                <div class="imagelist"
+                     style="display: flex; white-space: nowrap; flex-wrap: nowrap">
+                    <img class="srcimage" src="~/assets/img/imagelist1.jpg" alt="" />
+                    <img class="srcimage" src="~/assets/img/imagelist2.jpg" alt="" />
+                </div>
+            </div>
+        </div>
+        <div id="new_activity" class="container mt-3">
+            <h5><b>HOẠT ĐỘNG MỚI</b></h5>
+            <div id="new_activity_content" class="ml-2">
+                <div class="scrolling-text flex-column    ">
+                    <p>
+                        Chuyên đề Kỹ năng “Quản trị bản thân - Cơ hội và sự thăng tiến
+                        trong nghề nghiệp”
+                    </p>
+                    <p>
+                        Chuyên đề “Phương pháp ứng dụng AI hiệu quả trong việc học
+                        tiếng Anh”
+                    </p>
+                    <p>
+                        Hội thi “Tuổi trẻ Trường Đại học Sư phạm Thành phố Hồ Chí Minh
+                        với Pháp luật” lần thứ X, năm 2023
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+<style>
+    #right-side {
+      background-color: #b4d1fd;
+      width: 250px;
+      padding: 5px;
+      padding-left: 8px;
+      top: 0; /* Đặt phần tử bắt đầu từ đầu trang */
+      bottom: 0; /* Kéo dài phần tử đến cuối trang */
+      right: 0;
+      position: relative;
+    }
+    .flex-container {
+      display: flex;
+      flex-direction: row; /* Sắp xếp các phần tử theo chiều ngang */
+      justify-content: flex-start; /* Căn chỉnh các phần tử về phía bắt đầu của container */
+      align-items: center; /* Căn chỉnh các phần tử theo chiều dọc */
+      gap: 10px; /* Khoảng cách giữa các phần tử */
+    }
+    .flex-column {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+    }
+    .primary {
+      position: fixed;
+      right: 0;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #DEDEDE;background-color: #DEDEDE;
+    }
+    .td_crieria {
+      width: 140px;
+    }
+    /*@@keyframes slide {
+      0% {
+        transform: translateX(100%);
+      }
+      100% {
+        transform: translateX(-140%);
+      }
+    }*/
+    #divpicture {
+      overflow: hidden; /* Ẩn bất kỳ nội dung nào vượt ra khỏi phần tử cha */
+      padding-top: 10px;
+      padding-bottom: 10px;
+      position: relative;
+      height: 120px;
+    }
+    /* Apply animation to image list */
+    #image-list {
+      height: 120px;
+      display: flex;
+      white-space: nowrap;
+      flex-wrap: nowrap;
+      position: absolute;
+      animation: slide 15s linear infinite;
+    }
+
+    /* Apply animation to individual images */
+    #divpicture .imagelist {
+      display: inline-block;
+      width: auto;
+      height: 100px;
+      
+    }
+
+    .srcimage {
+      margin-right: 5px;
+    }
+    ul {
+      z-index: 200;
+    }
+    th {
+      font-size: 18px;
+    }
+    td {
+      font-weight: 500;
+    }
+    #new_activity_content {
+      overflow: hidden; /* Ẩn phần vượt ra ngoài */
+      height: 280px; /* Đảm bảo đủ không gian cho hiển thị chữ */
+      position: relative; /* Để chữ có thể di chuyển */
+    }
+
+    .scrolling-text {
+      position: absolute; /* Đảm bảo chữ chạy trên phần tử cha */
+      animation: scroll-up 20s linear infinite; /* Áp dụng animation */
+    }
+
+    @@keyframes slide {
+       0% {
+        right: -200%; /* Bắt đầu từ dưới cùng */
+       }
+       100% {
+         right: 100%; /* Kết thúc tại trên cùng */
+       }
+     }
+
+    @@keyframes scroll-up {
+      0% {
+        top: 100%; /* Bắt đầu từ dưới cùng */
+      }
+      100% {
+        top: -100%; /* Kết thúc tại trên cùng */
+      }
+    }
+</style>
 
 <!-- /.row -->
 @section Scripts{
@@ -80,7 +238,7 @@
         $("#example1").DataTable({
             "responsive": true, "lengthChange": false, "autoWidth": false,
         }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-        $(".join").on("click",function(e){
+        $(".join").on("click", function (e) {
             e.preventDefault();
             var id = $(this).data("id");
             var ob = {
