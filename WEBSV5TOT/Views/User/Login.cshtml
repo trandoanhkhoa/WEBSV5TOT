@@ -59,7 +59,7 @@
             <div class="textbox_login">
                 @Html.TextBoxFor(x=>x.UserName,new{@class="form-control mt-4 p-4",@style="border-radius: 12px;",@placeholder="Nhập tên đăng nhập"})
                 @Html.TextBoxFor(x=>x.Password,new{@class="form-control mt-4 p-4",@style="border-radius: 12px;",@placeholder="Nhập tên đăng nhập",@type="password"})
-                
+
             </div>
             <div class="mt-4">
                 <a class="text-right d-block" id="forgotPasswordLink" href="#">Quên mật khẩu?</a>
@@ -78,19 +78,24 @@
             <b class="title_login">BẢN ĐỒ "SINH VIÊN 5 TỐT"</b>
         </div>
         <div class="form_login position-relative mt-3">
-            <div class="position-absolute" style="top: 30px; left: 35px;"><i id="backToLogin" style="font-size: 25px; color: rgb(18, 72, 116);" class="fas fa-arrow-left"></i></div>
+            <div class="position-absolute" style="top: 30px; left: 35px;">
+                <i id="backToLogin" style="font-size: 25px; color: rgb(18, 72, 116);" class="fas fa-arrow-left"></i>
+            </div>
             <div class="text-center"><img src="~/assets/icons/dhsp.png" alt=""></div>
             <div class="textbox_login">
-                @Html.TextBoxFor(x=>x.MSSV,new{@class="form-control mt-4 p-4",@style="border-radius: 12px;",@placeholder="Nhập tên mã số sinh viên"})
-                @Html.TextBoxFor(x=>x.otp,new{@class="form-control mt-4 p-4",@style="border-radius: 12px;",@placeholder="Nhập OTP",@type="text"})
-                <input class="form-control mt-4 p-4" style="border-radius: 12px;" type="text" placeholder="Nhập tài khoản sinh viên của bạn">
-                <input class="form-control mt-4 p-4" style="border-radius: 12px;" type="password" placeholder="Mã OTP">
+                @Html.TextBoxFor(x=>x.MSSV,new{@class="form-control mt-4 p-4",@style="border-radius: 12px;",@placeholder="Nhập mã số sinh viên"})
+                @Html.TextBoxFor(x => x.otp, new { @id = "otpTextbox", @class = "form-control mt-4 p-4", @style = "border-radius: 12px; display:none;", @placeholder = "Nhập OTP", @type = "text" })
+                <input id="passwordnew" class="form-control mt-4 p-4" style="border-radius: 12px; display:none;" type="password" placeholder="Nhập mật khẩu mới" />
+                <input id="passwordcheck" class="form-control mt-4 p-4" style="border-radius: 12px; display:none;" type="password" placeholder="Xác nhận mật khẩu" />
             </div>
             <div class="text-center mt-3 mb-3">
-                <button class="btn fw-bold" style="padding: 10px 16px;background-color: rgb(18, 72, 116); color: white;">Gửi mật khẩu mới</button>
+                <button id="sendOtpButton" class="btn fw-bold" style="padding: 10px 16px;background-color: rgb(18, 72, 116); color: white;">Gửi mã OTP</button>
+                <button id="resetPassword" class="btn fw-bold" style="padding: 10px 16px;background-color: rgb(18, 72, 116); color: white;display:none">Đổi mật khẩu</button>
             </div>
         </div>
+        
     </div>
+    
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="~/assets/script/code.js"></script>
@@ -99,15 +104,56 @@
     <script src="~/assets/plugins/sweetalert2/sweetalert2.min.js"></script>
     <script src="~/assets/script/main.js"></script>
     <script>
-        $("#login").on("click",function(e){
+        $("#login").on("click", function (e) {
             e.preventDefault();
             var ob = {
                 "UserName": $("#UserName").val(),
                 "Password": $("#Password").val(),
-                "otp" : $("#otp").val(),
+                "otp": $("#otpTextbox").val(),
                 "MSSV": $("#MSSV").val()
             }
-            PostDataWithObject("add", ob, "/User/Login", "Đăng nhập thành công", "Tên đăng nhập hoặc mật khẩu sai", "", "/Home/Index");
+            PostDataWithObject("add", ob, "/User/Login", "Đăng nhập thành công", "Tên đăng nhập hoặc mật khẩu sai", "", "/Home/index");
+        });
+        $(document).ready(function () {
+            $('#sendOtpButton').on('click', function () {
+                if ($("#MSSV").val()!="")
+                {
+                    $('#otpTextbox').show();
+                    $('#passwordnew').show();
+                    $('#passwordcheck').show();
+                    $(this).hide();
+                    $('#resetPassword').show();
+                    if ($("#passwordcheck").val() === $("#passwordnew").val())
+                    {
+                        var ob = {
+                            "MSSV": $("#MSSV").val(),
+                            "otp": $("#otpTextbox").val(),
+                            "PasswordNew": $("#passwordnew").val()
+                        }
+                        PostDataWithObject("add", ob, "/User/SendOTP", "Mã OTP đã được gửi về mail của bạn!", "MSSV chưa chính xác !", "", "");
+                    }
+                    else 
+                    {
+                        showToast("error", "Mật khẩu chưa trùng khớp !", 3000, "top");
+                    }
+                    
+                    
+                }
+                else 
+                {
+                    showToast("error", "Vui lòng nhập mã số sinh viên", 3000, "top");
+                }
+                
+            });
+            $("#resetPassword").on("click",function(e){
+                e.preventDefault();
+                var ob = {
+                    "otp": $("#otpTextbox").val(),
+                    "MSSV": $("#MSSV").val(),
+                    "PasswordNew": $("#passwordnew").val()
+                }
+                PostDataWithObject("add", ob, "/User/ResetPassword", "Mật khẩu đã được thay đổi", "Mã OTP chưa chính xác", "", "/User/Login");
+            })
         });
     </script>
 </body>

@@ -31,7 +31,7 @@ public partial class Sv5totContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 
-        => optionsBuilder.UseSqlServer("Data Source=MSI;Initial Catalog=SV5TOT;Integrated Security=True;TrustServerCertificate=True;");//"Data Source=LAPTOP-ENCKOU6S;Initial Catalog=SV5TOT;TrustServerCertificate=True;Integrated Security=True;TrustServerCertificate=True;"); //optionsBuilder.UseSqlServer("Data Source=MSI;Initial Catalog=SV5TOT;TrustServerCertificate=True;Integrated Security=True;TrustServerCertificate=True;");
+        => optionsBuilder.UseSqlServer("Data Source=MSI;Initial Catalog=SV5TOT;TrustServerCertificate=True;Integrated Security=True;TrustServerCertificate=True;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -119,6 +119,10 @@ public partial class Sv5totContext : DbContext
                 .HasMaxLength(30)
                 .IsUnicode(false)
                 .HasColumnName("MSSV");
+            entity.Property(e => e.Otp)
+                .HasMaxLength(8)
+                .IsUnicode(false)
+                .HasColumnName("OTP");
             entity.Property(e => e.PartId).HasColumnName("PartID");
             entity.Property(e => e.Password)
                 .HasMaxLength(20)

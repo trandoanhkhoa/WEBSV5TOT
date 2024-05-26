@@ -27,6 +27,8 @@ public partial class User
 
     public string? Gender { get; set; }
 
+    public string? Otp { get; set; }
+
     public int? RoleId { get; set; }
 
     public virtual Class? Class { get; set; }

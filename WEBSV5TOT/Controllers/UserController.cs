@@ -5,6 +5,7 @@ using System.Security.Claims;
 using WEBSV5TOT.Models;
 using WEBSV5TOT.ViewModel;
 using Microsoft.EntityFrameworkCore;
+using System.Net.Mail;
 
 namespace WEBSV5TOT.Controllers
 {
@@ -21,9 +22,9 @@ namespace WEBSV5TOT.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(UserViewModel model, string ReturnUrl = "")
+        public async Task<IActionResult> Login(UserViewModel model, string ReturnUrl = "/Home/Index")
         {
-            var user = db.Users.Include(x=>x.Role)
+            var user = db.Users.Include(x => x.Role)
                 .SingleOrDefault(x => x.Username == model.UserName && x.Password == model.Password);
             if (user == null) // Tài khoản không tồn tại
             {
@@ -60,16 +61,116 @@ namespace WEBSV5TOT.Controllers
                 var identity = new ClaimsIdentity(claims, "Cookies");
                 var principal = new ClaimsPrincipal(identity);
                 await HttpContext.SignInAsync(principal);
-               
+
                 return Json(new { status = true, mess = "", url = ReturnUrl });
             }
 
         }
 
         public async Task<IActionResult> Logout()
-        { 
+        {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return View("Loggin");
+            return View("Login");
+        }
+
+        [HttpPost]
+        public IActionResult SendOTP(UserViewModel us)
+        {
+            var user = db.Users.SingleOrDefault(x => x.Mssv == us.MSSV);
+            if(user != null)
+            {
+                int otp = SendMailLeave(user);
+                return Json(new { status = true });
+            }
+            else
+            {
+                return Json(new { status = false, });
+            } 
+                
+        }
+        public IActionResult ResetPassword(UserViewModel us)
+        {
+            var usr = db.Users.SingleOrDefault(x=>x.Mssv==us.MSSV);
+            if(usr != null)
+            {
+                if (usr.Otp == us.otp)
+                {
+                    usr.Password = us.PasswordNew;
+                    usr.Otp = "";
+                    db.SaveChanges();
+                    return Json(new { status = true });
+                }
+                else
+                {
+                    return Json(new { status = false });
+                } 
+                    
+                
+            }
+            else
+            {
+                return Json(new { status = false});
+            } 
+                
+        }
+        public int SendMailLeave(User us)
+        {
+            Random rd = new Random();
+            int otp = rd.Next(100000, 999999);
+            var user = db.Users.SingleOrDefault(x => x.Mssv == us.Mssv);
+            if(user != null)
+            {
+                user.Otp = otp.ToString();
+                db.SaveChanges();
+            }
+            string Mailbody = $@"<div style=""font-family: Helvetica,Arial,sans-serif;min-                                  width:1000px;overflow:auto;line-height:2"">
+                           <div style=""margin:30px auto;width:70%;padding:10px 0"">
+    <div style=""border-bottom:1px solid #eee"">
+      <div style=""display:flex; align-items:center"">
+          <img src=""https://lib.hcmue.edu.vn/sites/default/files/Logo%20HCMUP.png""  style=""width:130px""/>
+          <img src=""https://youth.ueh.edu.vn/wp-content/uploads/2022/10/Thap-1.png""  style=""width:150px""/>
+        </div>
+    </div>
+    <p style=""font-size:1.1em"">Gửi đến {us.FullName}</p>
+    <p>Đây là mã OTP thiết lập mật khẩu, vui lòng không chia sẽ mã OTP cho bất kì ai !. OTP sẽ có hiệu lực trong 1 phút</p>
+    <h2 style=""background: #00466a;margin: 0 auto;width: max-content;padding: 0 10px;color: #fff;border-radius: 4px;"">{otp}</h2>
+    <p style=""font-size:0.9em;"">Gửi từ,<br />Hội sinh viên./</p>
+    <hr style=""border:none;border-top:1px solid #eee"" />
+    <div style=""float:right;padding:8px 0;color:#aaa;font-size:0.8em;line-height:1;font-weight:300"">
+      <p>Hội sinh viên trường Đại học Sư Phạm TP.HCM</p>
+      <p>Trường Đại Học Sư Phạm TP.HCM</p>
+    </div>
+  </div>
+</div>";
+
+
+            string subject = "MÃ OTP THIẾT LẬP TÀI KHOẢN " + us.Mssv;
+            string mailTitle = "SINH VIÊN 5 TỐT - MÃ OTP THIẾT LẬP TÀI KHOẢN";
+            string fromEmail = "trankhoa192837@gmail.com";
+            string fromEmailPassword = "nnpbsdgxqcrdxcyj";
+
+            //Email Content
+            MailMessage mailMessage = new MailMessage(new MailAddress(fromEmail, mailTitle), new MailAddress(us.Email));
+            mailMessage.Subject = subject;
+            mailMessage.Body = Mailbody;
+            mailMessage.IsBodyHtml = true;
+
+            //Server Details
+            SmtpClient smtp = new SmtpClient();
+            smtp.Host = "smtp.gmail.com";
+            smtp.Port = 587;
+            smtp.EnableSsl = true;
+            smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
+
+            //Credentials
+            System.Net.NetworkCredential credential = new System.Net.NetworkCredential();
+            credential.UserName = fromEmail;
+            credential.Password = fromEmailPassword;
+            smtp.UseDefaultCredentials = false;
+            smtp.Credentials = credential;
+
+            smtp.Send(mailMessage);
+            return otp;
         }
 
     }

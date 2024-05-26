@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Data;
 using System.Diagnostics;
 using WEBSV5TOT.Models;
 
 namespace WEBSV5TOT.Areas.Admin.Controllers
 {
+    [Authorize(Roles = "admin,banthuky")]
     [Area("Admin")]
     public class ActivitiesController : Controller
     {

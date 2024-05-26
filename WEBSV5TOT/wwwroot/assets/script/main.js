@@ -13,6 +13,11 @@
                                 window.location.href = ReturnUrl;
                             }, 2000)
                         }
+                        else if (result.url != "") {
+                            setTimeout(function () {
+                                window.location.href = result.url;
+                            }, 2000)
+                        }
                     }
                     else {
                         showToast("error", _messError, 2500);
@@ -32,7 +37,9 @@
                         setTimeout(function () {
                             location.reload();
                         }, 2500)
+
                     }
+                   
                     else {
                         showToast("error", _messError, 2500);
                     }
@@ -53,7 +60,9 @@
                                 window.location.href = ReturnUrl;
                             }, 2000)
                         }
+                        
                     }
+
                     else {
                         showToast("error", _messError, 2500);
                     }

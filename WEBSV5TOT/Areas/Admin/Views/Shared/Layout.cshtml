@@ -233,15 +233,19 @@
                                 </li>
                             </ul>
                         </li>
-                        <li class="nav-item">
-                            <a href="/Admin/user/index" class="nav-link">
-                             
-                                <i class="nav-icon fas fa-users"></i>
-                                <p>
-                                    Quản lí tài khoản
-                                </p>
-                            </a>
-                        </li>
+                        @if (User.IsInRole("admin"))
+                        {
+                            <li class="nav-item">
+                                <a href="/Admin/user/index" class="nav-link">
+
+                                    <i class="nav-icon fas fa-users"></i>
+                                    <p>
+                                        Quản lí tài khoản
+                                    </p>
+                                </a>
+                            </li>
+                        }
+                        
                         <li class="nav-item">
                             <a href="/Admin/activities/index" class="nav-link">
                                 <i class="nav-icon fas fa-tasks"></i>

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using WEBSV5TOT.Models;
@@ -6,6 +7,7 @@ using WEBSV5TOT.ViewModel;
 
 namespace WEBSV5TOT.Areas.Admin.Controllers
 {
+    [Authorize(Roles = "admin,banthuky")]
     [Area("Admin")]
     public class ApprovalController : Controller
     {

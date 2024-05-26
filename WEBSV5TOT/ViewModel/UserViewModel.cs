@@ -6,5 +6,6 @@
         public string? Password { get; set;} 
         public string? MSSV { get; set;}
         public string? otp { get; set;}
+        public string? PasswordNew { get; set;}
     }
 }

@@ -31,6 +31,8 @@ namespace WEBSV5TOT.Controllers
             }
             else
             {
+                var act = db.Activities.SingleOrDefault(x=>x.Id== idActivity);
+                if(act != null) act.Quantity += 1;
                 var actiadd = new Student5Good();
                 actiadd.ActivityId = idActivity;
                 actiadd.UserId = tmp;
