@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using System.IO;
 using WEBSV5TOT.Models;
 
 namespace WEBSV5TOT.Controllers
@@ -16,8 +17,18 @@ namespace WEBSV5TOT.Controllers
         }
         public IActionResult Index()
         {
-            int tmp = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            var lst = db.Student5Goods.Where(x => x.UserId == tmp).Include(x => x.Activity).ToList();
+            int curruserid = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            var lst = db.Student5Goods.Where(x => x.UserId == curruserid).Include(x => x.Activity).ToList();
+            var criteriasQuerry = db.Student5Goods
+                                  .Where(s5g => s5g.UserId == curruserid)
+                                  .Join(db.Activities,
+                                        s5g => s5g.ActivityId,
+                                        act => act.Id,
+                                        (s5g, act) => new { act.Type })
+                                  .GroupBy(x => x.Type)
+                                  .Select(g => g.Key);
+            ViewBag.CriteriasSucceed = criteriasQuerry.ToList();
+            ViewBag.Criterias = new List<string> { "Đạo đức tốt", "Học tập tốt", "Thể lực tốt", "Tình nguyện tốt", "Hội nhập tốt" };
             return View(lst);
         }
         public IActionResult Create(int idActivity)
@@ -47,19 +58,39 @@ namespace WEBSV5TOT.Controllers
         [HttpPost]
         public async Task<IActionResult> UploadFile(List<IFormFile> files, int Student5GoodId)
         {
-            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            var s5g = db.Student5Goods.Where(x => x.Id == Student5GoodId).Single();
+            var userId = s5g.UserId;
+            var activityId = s5g.ActivityId;
             string uploadPath = Path.Combine(_environment.ContentRootPath, "Proofs");
             if (!Directory.Exists(uploadPath))
             {
                 Directory.CreateDirectory(uploadPath);
             }
+
+            //Delete exist files
+            //var existFiles = db.ProofPictures.Where(x => x.Student5GoodId == s5g.Id).ToList(); 
+
+            //if(existFiles.Count > 0)
+            //{
+            //    foreach (var picture in existFiles)
+            //    {
+            //        string filePath = Path.Combine(uploadPath, picture.FileName);
+            //        if (System.IO.File.Exists(filePath))
+            //        {
+            //            System.IO.File.Delete(filePath);
+            //        }
+            //    }
+            //    db.ProofPictures.RemoveRange(existFiles);
+            //    db.SaveChanges();
+            //}
+
             int index = 0;
             foreach (var file in files)
             {
                 if (file.Length > 0)
                 {
                     string fileExtension = Path.GetExtension(file.FileName);
-                    string newFileName = $"file_{Student5GoodId}_{DateTime.Now:yyyyMMddHHmmssfff}_{index}{fileExtension}";
+                    string newFileName = $"file{index}_{userId}_{activityId}_{DateTime.Now:yyyyMMddHHmmssfff}{fileExtension}";
                     string filePath = Path.Combine(uploadPath, newFileName);
 
                     using (var stream = new FileStream(filePath, FileMode.Create))
@@ -80,9 +111,24 @@ namespace WEBSV5TOT.Controllers
             }
 
             await db.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index");
+        }
+        [HttpGet]
+        public ActionResult GetImages(int id)
+        {
+            var lst = db.ProofPictures.Where(x => x.Student5GoodId == id).Select(x => x.FileName).ToList();
+            if (lst.Count > 0)
+            {
+                // Trả về hình ảnh
+                return Json(new { status = true, list = lst }); ; // Thay đổi "image/jpeg" thành kiểu MIME của hình ảnh của bạn
+            }
+            else
+            {
+                return Json(new { status = false });
+            }
         }
     }
+    
 }
 
 

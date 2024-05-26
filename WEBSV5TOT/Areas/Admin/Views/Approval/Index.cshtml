@@ -93,6 +93,7 @@
 </div>
 @section Scripts {
     <script>
+        
         $('.btnview').on('click', function () {
             var data_id = this.getAttribute('data-id');
             $.ajax({
@@ -106,36 +107,50 @@
                 }
             });
         });
-        $('.btnapprove').on('click', function () {
-            var data_id = this.getAttribute('data-id');
-            $(this).closest("td").html('<button data-id="' + data_id + '" class="btndisapprove btn btn-danger join">Hủy duyệt</button>');
-            $.ajax({
-                url: "/admin/Approval/Approve/" + data_id,
-                type: "POST",
-                success: function () {
-                    showToast("success", "Đã duyệt thành công", 2500);
-                    
-                },
-                error: function (error) {
-                    showToast("error", "Duyệt thất bại", 2500);
-                }
+        function addEventLisBtnApprove(){
+            $('.btnapprove').on('click', function () {
+                var data_id = this.getAttribute('data-id');
+                $(this).closest("td").html('<button data-id="' + data_id + '" class="btndisapprove btn btn-danger join">Hủy duyệt</button>');
+                
+                $.ajax({
+                    url: "/admin/Approval/Approve/" + data_id,
+                    type: "POST",
+                    success: function () {
+                        showToast("success", "Đã duyệt thành công", 2500);
+                        addEventLisBtnDisApprove();
+                    },
+                    error: function (error) {
+                        showToast("error", "Duyệt thất bại", 2500);
+                    }
+                });
             });
-        });
-        $('.btndisapprove').on('click', function () {
-            var data_id = this.getAttribute('data-id');
-            $(this).closest("td").html('<button data-id="' + data_id + '"class="btnapprove btn btn-success join">Duyệt</button>');
-            $.ajax({
-                url: "/admin/Approval/DisApprove/" + data_id,
-                type: "POST",
-                success: function () {
-                    showToast("success", "Đã hủy thành công", 2500);
-                    
-                },
-                error: function (error) {
-                    showToast("error", "Hủy thất bại", 2500);
-                }
+        }
+        
+
+        function addEventLisBtnDisApprove() {
+            $('.btndisapprove').on('click', function () {
+                var data_id = this.getAttribute('data-id');
+                $(this).closest("td").html('<button data-id="' + data_id + '"class="btnapprove btn btn-success join">Duyệt</button>');
+                
+                $.ajax({
+                    url: "/admin/Approval/DisApprove/" + data_id,
+                    type: "POST",
+                    success: function () {
+                        showToast("success", "Đã hủy thành công", 2500);
+                        addEventLisBtnApprove();
+                    },
+                    error: function (error) {
+                        showToast("error", "Hủy thất bại", 2500);
+                    }
+                });
             });
-        });
+        }
+
+        addEventLisBtnApprove();
+        addEventLisBtnDisApprove();
+
+
+
         $("#example1").DataTable({
             "responsive": true, "lengthChange": false, "autoWidth": false,
             "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]

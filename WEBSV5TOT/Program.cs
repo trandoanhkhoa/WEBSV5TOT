@@ -10,7 +10,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 builder.Services.AddDbContext<Sv5totContext>(options =>
 {
-    options.UseSqlServer("Data Source=MSI;Initial Catalog=SV5TOT;Integrated Security=True;TrustServerCertificate=True;");
+    options.UseSqlServer("Data Source=LAPTOP-ENCKOU6S;Initial Catalog=SV5TOT;Integrated Security=True;TrustServerCertificate=True;");
 });
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -58,6 +58,11 @@ app.UseEndpoints(endpoints =>
         name: "showImages",
         pattern: "admin/Approval/_ImageList/{id}",
         defaults: new { controller = "Approval", action = "_ImageList" });
+
+    endpoints.MapControllerRoute(
+        name: "showExistImages",
+        pattern: "DSHoatDong/GetImages/{id}",
+        defaults: new { controller = "DSHoatDong", action = "GetImages" });
 });
 
 app.Run();
