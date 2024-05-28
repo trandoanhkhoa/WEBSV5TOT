@@ -168,10 +168,16 @@ namespace WEBSV5TOT.Controllers
             credential.Password = fromEmailPassword;
             smtp.UseDefaultCredentials = false;
             smtp.Credentials = credential;
-
             smtp.Send(mailMessage);
             return otp;
         }
-
+        public IActionResult InforUser()
+        {
+            int UserID = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            var user = db.Users.Include(x=>x.Part).SingleOrDefault(x=>x.Id==UserID);
+            ViewBag.Part = db.Parts.ToList();
+            ViewBag.Class = db.Classes.ToList();
+            return View(user);
+        }    
     }
 }

@@ -22,6 +22,7 @@ namespace WEBSV5TOT.Areas.Admin.Controllers
         {
             var lst = db.Student5Goods
                 .Where(student => student.ProofPictures.Any(picture => picture.Student5GoodId == student.Id))
+                .OrderByDescending(x=>x.Id)
                 .ToList(); ;
             ViewBag.ProofPictures = db.ProofPictures.ToList();
             ViewBag.Users = db.Users.ToList();

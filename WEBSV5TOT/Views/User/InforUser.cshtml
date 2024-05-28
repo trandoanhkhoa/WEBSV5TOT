@@ -1,0 +1,182 @@
+﻿@model WEBSV5TOT.Models.User;
+@using WEBSV5TOT.Models;
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var lstPart = ViewBag.Part as List<Part>;
+    var lstClass = ViewBag.Class as List<Class>;
+}
+
+<section class="content mt-4 ml-2 mr-2">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3">
+
+                <!-- Profile Image -->
+                <div class="card card-primary card-outline">
+                    <div class="card-body box-profile">
+                        <div class="text-center">
+                            <img class="profile-user-img img-fluid img-circle"
+                                 src="~/assets/dist/img/user4-128x128.jpg"
+                                 alt="User profile picture">
+                        </div>
+
+                        <h3 class="profile-username text-center">@Model.FullName</h3>
+
+                        <p class="text-muted text-center">@Model.Part.Name</p>
+
+                        <ul class="list-group list-group-unbordered mb-3">
+                            <li class="list-group-item">
+                                <b>Đã tham gia</b> <a class="float-right">1,322</a>
+                            </li>
+                        </ul>
+                        
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+                
+            </div>
+            <!-- /.col -->
+            <div class="col-md-9">
+                <div class="card">
+                    <div class="card-header p-2">
+                        <ul class="nav nav-pills">
+                           
+                            <li class="nav-item"><a class="nav-link active" href="#settings" data-toggle="tab">Thiết lập tài khoản</a></li>
+                        </ul>
+                    </div><!-- /.card-header -->
+                    <div class="card-body">
+                        <div class="tab-content">
+                            <div class="active tab-pane" id="settings">
+                                <form class="form-horizontal">
+                                    <div class="form-group row">
+                                        <label for="inputName" class="col-sm-2 col-form-label">Họ và tên</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" value="@Model.FullName" class="form-control" id="inputName" placeholder="Name">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="inputName" class="col-sm-2 col-form-label">Ảnh đại diện</label>
+                                        <div class="col-sm-10">
+                                            <input type="file" class="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="inputEmail" class="col-sm-2 col-form-label">MSSV</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" value="@Model.Mssv" class="form-control" id="inputEmail" placeholder="Mã số sinh viên">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="inputEmail" class="col-sm-2 col-form-label">Email</label>
+                                        <div class="col-sm-10">
+                                            <input type="email" value="@Model.Email" class="form-control" id="inputEmail" placeholder="Email">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="Gender" class="col-sm-2 col-form-label">Giới tính</label>
+                                        <div class="col-sm-10">
+                                            <select class="form-control select2" style="width:100%">
+                                                @if(Model.Gender == "0")
+                                                {
+                                                    <option value="0">Nam</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="1">Nữ</option>
+
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="inputName2" class="col-sm-2 col-form-label">Mật khẩu</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" id="inputName2" placeholder="Mật khẩu hiện tại">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="inputName2" class="col-sm-2 col-form-label">Mật khẩu mới</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" id="inputName2" placeholder="Mật khẩu mới">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="inputSkills" class="col-sm-2 col-form-label">Khoa</label>
+                                        <div class="col-sm-10">
+                                            @if(lstPart!=null)
+                                            {
+                                                <select class="form-control select2" style="width:100%">
+                                                    @foreach(var item in lstPart)
+                                                    {
+                                                        if(item.Id==Model.PartId)
+                                                        {
+                                                            <option selected value="@item.Id">@item.Name</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@item.Id">@item.Name</option>
+                                                        }
+                                                    }
+                                                </select>
+                                            }
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="inputSkills" class="col-sm-2 col-form-label">Lớp</label>
+                                        <div class="col-sm-10">
+                                            @if (lstClass != null)
+                                            {
+                                                <select class="form-control select2" style="width:100%">
+                                                    @foreach (var item in lstClass)
+                                                    {
+                                                        if (item.Id == Model.ClassId)
+                                                        {
+                                                            <option selected value="@item.Id">@item.Name</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@item.Id">@item.Name</option>
+                                                        }
+                                                    }
+                                                </select>
+                                            }
+
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="offset-sm-2 col-sm-10">
+                                            <div class="checkbox">
+                                                <label>
+                                                    <input type="checkbox"> <a href="#"> Tôi đồng ý với tất cả các thay đổi trên</a>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="offset-sm-2 col-sm-10">
+                                            <button type="submit" class="btn btn-warning">Thay đổi</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <!-- /.tab-pane -->
+                        </div>
+                        <!-- /.tab-content -->
+                    </div><!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </div><!-- /.container-fluid -->
+</section>
+@section Scripts{
+    <script>
+        $('.select2').select2({
+            theme: 'bootstrap4'
+        })
+    </script>
+}

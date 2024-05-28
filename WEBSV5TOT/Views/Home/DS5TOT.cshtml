@@ -1,0 +1,24 @@
+﻿@model IEnumerable<WEBSV5TOT.Models.User>
+@using WEBSV5TOT.Models
+@{
+    var lstPart = ViewBag.Part as List<Part>;
+}
+@if(Model!=null)
+{
+    int stt = 1;
+    foreach(var item in Model)
+    {
+        <tr>
+            <td>@stt</td>
+            <td>
+                @item.Mssv
+            </td>
+            <td>@item.FullName</td>
+            <td>@(item.Gender == "0" ? "Nam" : " Nữ")</td>
+            <td>@lstPart.SingleOrDefault(x=>x.Id==item.PartId).Name</td>
+            <td>2024</td>
+            <td></td>
+        </tr>
+        stt++;
+    }
+}

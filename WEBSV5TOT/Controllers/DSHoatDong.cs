@@ -66,24 +66,6 @@ namespace WEBSV5TOT.Controllers
             {
                 Directory.CreateDirectory(uploadPath);
             }
-
-            //Delete exist files
-            //var existFiles = db.ProofPictures.Where(x => x.Student5GoodId == s5g.Id).ToList(); 
-
-            //if(existFiles.Count > 0)
-            //{
-            //    foreach (var picture in existFiles)
-            //    {
-            //        string filePath = Path.Combine(uploadPath, picture.FileName);
-            //        if (System.IO.File.Exists(filePath))
-            //        {
-            //            System.IO.File.Delete(filePath);
-            //        }
-            //    }
-            //    db.ProofPictures.RemoveRange(existFiles);
-            //    db.SaveChanges();
-            //}
-
             int index = 0;
             foreach (var file in files)
             {

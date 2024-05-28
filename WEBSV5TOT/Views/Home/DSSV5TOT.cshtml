@@ -1,8 +1,9 @@
 ﻿@using WEBSV5TOT.Models;
-@model IEnumerable<WEBSV5TOT.Models.Student5Good>
+@model IEnumerable<WEBSV5TOT.Models.User>
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     var lstDonvi = ViewBag.Donvi as List<Part>;
+    var lstLop = ViewBag.Lop as List<Class>;
 
 }
 <div class="card mt-2">
@@ -38,10 +39,10 @@
             <div class="col-2">
                 <p>Lớp</p>
                 <select class="form-control select2bs4 Lop" style="width: 100%; height:100%">
-                    @if (lstDonvi != null)
+                    @if (lstLop != null)
                     {
                         <option selected>--- Default ---</option>
-                        foreach (var item in lstDonvi)
+                        foreach (var item in lstLop)
                         {
                             <option value="@item.Id">@item.Name</option>
                         }
@@ -61,8 +62,8 @@
             </div>
             <div class="col-3">
                 <p>Cấp</p>
-                <select class="form-control select2bs4" style="width: 100%;">
-                    <option selected>--- Default ---</option>
+                <select class="form-control select2bs4 Cap" style="width: 100%;">
+                    <option value="" selected>--- Default ---</option>
                     <option value="Liên Chi hội">Liên Chi hội</option>
                     <option value="Trường">Trường</option>
                     <option value="Thành Phố">Thành Phố</option>
@@ -73,7 +74,7 @@
     </div>
     <div class="card-footer">
         <div class="row justify-content-end">
-            <button type="submit" id="search_booking" class="btn btn-success mr-1">Tìm kiếm</button>
+            <button type="submit" id="search_sv5tot" class="btn btn-success mr-1">Tìm kiếm</button>
         </div>
     </div>
 </div>
@@ -95,21 +96,29 @@
                     <th>Cấp</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>
-                        47.01.104.114
-                    </td>
-                    <td>Trần Đỗ Anh Khoa</td>
-                    <td>Nam</td>
-                    <td>Công nghệ thông tin</td>
-                    <td>2023-2024</td>
-                    <td>Trường</td>
-                </tr>
-                
+            <tbody id="dssv5tot">
+                @if (Model != null)
+                {
+                    int stt = 1; 
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@stt</td>
+                            <td>
+                                @item.Mssv
+                            </td>
+                            <td>@item.FullName</td>
+                            <td>@(item.Gender == "0" ? "Nam" :" Nữ")</td>
+                            <td>@lstDonvi.SingleOrDefault(x=>x.Id==item.PartId).Name</td>
+                            <td>2024</td>
+                            <td></td>
+                        </tr>
+                    }
+                }
+
+
             </tbody>
-            
+
         </table>
     </div>
     <!-- /.card-body -->
@@ -123,7 +132,7 @@
     </script>
     <script>
         $(function () {
-            
+
             $('#example2').DataTable({
                 "paging": true,
                 "lengthChange": false,
@@ -134,5 +143,24 @@
                 "responsive": true,
             });
         });
+        $("#search_sv5tot").on("click", function (e) {
+            e.preventDefault();
+            var ob = {
+                "MSSV": $("#MSSV").val(),
+                "Donvi": $(".Donvi").val(),
+                "Lop": $(".Lop").val(),
+                "Cap": $(".Cap").val()
+            }
+            $.ajax({
+                url: '/Home/SearchSV5TOT',
+                type: 'POST',
+                data: { model: ob },
+
+                success: function (response) {
+                    $("#dssv5tot").html(response);
+                },
+
+            });
+        })
     </script>
 }

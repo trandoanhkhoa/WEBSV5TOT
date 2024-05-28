@@ -95,7 +95,7 @@
                         <div class="drop-zone" id="dropZone">
                             Kéo và thả file để upload hoặc bấm để duyệt file
                         </div>
-                        <input type="file" id="fileInput" accept=".png,.jpg,.jpeg,.pdf" multiple style="display:none;">
+                        <input type="file" id="fileInput" accept=".png,.jpg,.jpeg,.pdf,.doc,.docx" multiple style="display:none;">
                         <div class="file-list" id="fileList"></div>
                     </div>
                     <div class="modal-footer">
@@ -359,10 +359,8 @@
                         console.log("Error load exist files:", error);
                     }
                 });
-
-
-
             });
+
             $('.close').on('click', function () {
                 data_id = null;
                 
@@ -396,12 +394,10 @@
                     }
                 });
             });
-
-            
-
             function handleFiles(files) {
                 for (let i = 0; i < files.length; i++) {
-                    if (['image/png', 'image/jpeg', 'application/pdf'].includes(files[i].type)) {
+                    // Thêm MIME type cho file .docx vào mảng các loại file được hỗ trợ
+                    if (['image/png', 'image/jpeg', 'application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'].includes(files[i].type)) {
                         fileList.push(files[i]);
                         displayFile(files[i], fileList.length - 1);
                     } else {
@@ -409,6 +405,7 @@
                     }
                 }
             }
+
 
             function displayFile(file, index) {
                 let fileListContainer = $('#fileList');
