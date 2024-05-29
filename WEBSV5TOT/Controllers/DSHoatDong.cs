@@ -21,6 +21,7 @@ namespace WEBSV5TOT.Controllers
             var lst = db.Student5Goods.Where(x => x.UserId == curruserid).Include(x => x.Activity).ToList();
             var criteriasQuerry = db.Student5Goods
                                   .Where(s5g => s5g.UserId == curruserid)
+                                  .Where(s5g => s5g.Approval == true)
                                   .Join(db.Activities,
                                         s5g => s5g.ActivityId,
                                         act => act.Id,
